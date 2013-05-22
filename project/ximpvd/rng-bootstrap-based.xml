@@ -22,6 +22,7 @@
 				<optional>
 <ref name="menu.class"/>
 </optional>
+				<optional><ref name="footer.class"/></optional>
 				<xim:description>ximlet</xim:description>
 				<xim:type>ximlet</xim:type>
 			</element>
@@ -685,4 +686,42 @@
 		</define>
 
 
+
+		<define name="footer.class">
+		<element name="footer">
+			<zeroOrMore>
+				<interleave>
+					<optional>
+<ref name="footer-link-list.class"/>
+</optional>
+					<optional>
+<ref name="footer-paragraph.class"/>
+</optional>
+				</interleave>
+			</zeroOrMore>
+			<xim:description>Footer</xim:description>
+		</element>
+	</define>
+
+	<define name="footer-link-list.class">
+		<element name="footer-link-list">
+			<oneOrMore>
+				<ref name="footer-link.class"/>
+			</oneOrMore>
+			<xim:description>Link list</xim:description>
+		</element>
+	</define>
+
+	<define name="footer-link.class">
+		<element name="footer-link">
+			<attribute name="href" xim:type="documentSelector"/>
+			<oneOrMore>
+				<ref name="footer-link.class"/>
+			</oneOrMore>
+			<text/>
+			<xim:default_content>[Link]</xim:default_content>
+			<xim:description>Link</xim:description>
+		</element>
+	</define>
+	
 </grammar>

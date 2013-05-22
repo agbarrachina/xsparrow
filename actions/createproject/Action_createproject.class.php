@@ -63,82 +63,9 @@ class Action_createproject extends ActionAbstract {
 
 
 
-    public function createproject() {
-
-        //Creating project
-        $nodeID = $this->request->getParam("nodeid");
-        $name = $this->request->getParam("name");
-        $this->name = $name;
-        $nodeType = $this->GetTypeOfNewNode($nodeID);
-        $nodeTypeName = $nodeType["name"];
-
-        $nodeType = new NodeType();
-        $nodeType->SetByName($nodeTypeName);
-
-        $buildFile = sprintf('%s/../../project/build.xml', dirname(__FILE__));
-        $b = new BuildParser($buildFile);
-        $this->project = $b->getProject();
-
-        //Replacing config element from form values
-        $this->changeXimletValues();
-
-
-        //Creating project
-         $data = array(
-          'NODETYPENAME' => $nodeTypeName,
-          'NAME' => $name,
-          'NODETYPE' => $nodeType->GetID(),
-          'PARENTID' => 10000
-          );
-
-          $io = new BaseIO();
-          $projectId = $io->build($data);
-          if ($projectId < 1) {
-          return false;
-          }
-
-
-          $project = new Node($projectId);
-          $this->project->projectid = $projectId;
-
-          $channel = $this->project->channel;
-          $channel = $channel == '{?}' ? $this->getChannel() : $channel;
-          $this->project->channel = $channel;
-
-          $lang = $this->project->language;
-          $lang = $lang == '{?}' ? $this->getLanguage() : $lang;
-          $this->project->language = $lang;
-
-          $project->setProperty('Transformer', $this->project->Transformer);
-          $project->setProperty('channel', $this->project->channel);
-          $project->setProperty('language', $this->project->lang);
-
-          Module::log(Module::SUCCESS, "Project creation O.K.");
-
-
-          // TODO: ximlink
-          $links = $this->project->getXimlink();
-          $this->templates = $this->insertFiles($this->project->projectid, 'ximlink', $links);
-
-          // Update XSL
-
-          $xsls = $this->project->getPTD('XSL');
-          $ret = $this->insertFiles($this->project->projectid, 'xìmptd', $xsls);
-
-          // Servers
-          $servers = $this->project->getServers();
-          foreach ($servers as $server) {
-          $this->insertServer($server);
-          }
-
-          $template = "success";
-
-          $values = array();
-          $this->render($values, $template, 'default-3.0.tpl');
-    }
-
-
-
+    /**
+	Create ProjectParser from xml file
+    */	
     private function buildProject(){
 
         $buildFile = sprintf('%s/../../project/build.xml', dirname(__FILE__));
@@ -530,12 +457,13 @@ class Action_createproject extends ActionAbstract {
 //              debug::log($project, $file, $data);
                 Module::log(Module::ERROR, "ximdoc document " . $file->name . " couldn't be created ($docId)");
             }
-        }
+        
 
-        if ($isXimlet){
-            $actionAddximlet = new Action_addximlet();
-            $actionAddximlet->createRelXimletSection($parentId, $containerId, 1);
-        }
+        	if ($isXimlet){
+	            $actionAddximlet = new Action_addximlet();
+        	    $actionAddximlet->createRelXimletSection($parentId, $containerId, 1);
+	        }
+	}
 
         if (count($ret) == 0)
             $ret = false;

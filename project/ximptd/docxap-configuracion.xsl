@@ -26,6 +26,7 @@
                                         	<xsl:apply-templates select="//menu/.."/>
                                               <xsl:apply-templates select="//config/.."/>
                                         <xsl:apply-templates select="//config/config-container"/>
+                                        <xsl:apply-templates select="//footer/.."/>
                                       </xsl:otherwise>
                                     </xsl:choose>
                                   

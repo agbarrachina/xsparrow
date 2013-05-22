@@ -20,6 +20,8 @@
 		</ximletcontainer>-->
 		<ximletcontainer>
 			<ximlet name="config" nodetypename="XIMLET" templatename="rng-configuracion" channel="{?}" language="{?}"/>
+			<ximlet name="menu" nodetypename="XIMLET" templatename="rng-ximlet-bootstrap-menu" channel="{?}" language="{?}"/>
+			<ximlet name="footer" nodetypename="XIMLET" templatename="rng-bootstrap-footer" channel="{?}" language="{?}"/>
 		</ximletcontainer>
 
 	</section>
